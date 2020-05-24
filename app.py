@@ -50,7 +50,7 @@ def criterio111(child):
     #Imagens e botões com imagens com null em contentDescription
     if child.tag == 'ImageView' or child.tag == 'ImageButton':
         if '{http://schemas.android.com/apk/res/android}contentDescription' in child.attrib:
-            value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription']
+            value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription'].strip(" ")
             if(value == '@null'):
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
@@ -72,7 +72,7 @@ def criterio111(child):
     #Inputs de texto em formulários possuem texto descritivo não nulo
     elif child.tag == 'EditText':
         if '{http://schemas.android.com/apk/res/android}hint' in child.attrib:
-            value = child.attrib['{http://schemas.android.com/apk/res/android}hint']
+            value = child.attrib['{http://schemas.android.com/apk/res/android}hint'].strip(" ")
             if(value == ''):
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
@@ -89,7 +89,7 @@ def criterio111(child):
                 for c in parent_map.items():
                     if(c.tag == 'TextView'):
                         if '{http://schemas.android.com/apk/res/android}labelFor' in c.attrib:
-                            value = c.attrib['{http://schemas.android.com/apk/res/android}labelFor']
+                            value = c.attrib['{http://schemas.android.com/apk/res/android}labelFor'].strip(" ")
                             if(value == idComponent):
                                 return
 
@@ -102,7 +102,7 @@ def criterio111(child):
     #Botões em formulários possuem texto descritivo não nulo
     elif child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton':
         if '{http://schemas.android.com/apk/res/android}text' in child.attrib:
-            value = child.attrib['{http://schemas.android.com/apk/res/android}text']
+            value = child.attrib['{http://schemas.android.com/apk/res/android}text'].strip(" ")
             if(value == ''):
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
@@ -125,14 +125,13 @@ def criterio111(child):
         verifyItemClicable(child)
 
     elif '{http://schemas.android.com/apk/res/android}clicable' in child.attrib:
-        value = child.attrib['{http://schemas.android.com/apk/res/android}clicable']
+        value = child.attrib['{http://schemas.android.com/apk/res/android}clicable'].strip(" ")
         if(value == 'true'):
             verifyItemClicable(child)
 
 def verifyItemClicable(child):
-    childs = findChildsFirstLevel(child)
     if '{http://schemas.android.com/apk/res/android}contentDescription' in child.attrib:
-        value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription']
+        value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription'].strip(" ")
         if(value == '@null'):
             idComponent = ""
             if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
@@ -142,7 +141,7 @@ def verifyItemClicable(child):
                 "description": "Valor nulo na descrição do conteúdo (contentDescription) do componente", 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})
     elif '{http://schemas.android.com/apk/res/android}text' in child.attrib:
-        value = child.attrib['{http://schemas.android.com/apk/res/android}text']
+        value = child.attrib['{http://schemas.android.com/apk/res/android}text'].strip(" ")
         if(value == ''):
             idComponent = ""
             if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
@@ -156,13 +155,13 @@ def verifyItemClicable(child):
         childs = findChildsFirstLevel(child)
         for c in childs:
             if '{http://schemas.android.com/apk/res/android}contentDescription' in c.attrib:
-                value = c.attrib['{http://schemas.android.com/apk/res/android}contentDescription']
+                value = c.attrib['{http://schemas.android.com/apk/res/android}contentDescription'].strip(" ")
                 if(value != '@null'):
                     existChild = True
                     break
 
             elif '{http://schemas.android.com/apk/res/android}text' in c.attrib:
-                value = child.attrib['{http://schemas.android.com/apk/res/android}text']
+                value = c.attrib['{http://schemas.android.com/apk/res/android}text'].strip(" ")
                 if(value != ''):
                     existChild = True
                     break
@@ -398,7 +397,7 @@ def criterio251(child):
 def criterio242(child):
     if child.tag == 'activity':   
         if '{http://schemas.android.com/apk/res/android}label' in child.attrib:
-            value = child.attrib['{http://schemas.android.com/apk/res/android}label']
+            value = child.attrib['{http://schemas.android.com/apk/res/android}label'].strip(" ")
             if(value == ''):
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}name' in child.attrib:
@@ -427,7 +426,7 @@ def criterio242(child):
 def criterio135(child):
     if child.tag == 'EditText':   
         if '{http://schemas.android.com/apk/res/android}inputType' in child.attrib:
-            value = child.attrib['{http://schemas.android.com/apk/res/android}inputType']
+            value = child.attrib['{http://schemas.android.com/apk/res/android}inputType'].strip(" ")
             if(value == ''):
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}id' in child.attrib:

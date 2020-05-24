@@ -20,7 +20,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:padding="@dimen/activity_horizontal_margin"
+		android:onClick="">
 
                 <!--
         <TextView
@@ -37,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
                     android:layout_marginBottom="-15dp"
-		    android:contentDescription="@null"
+		    android:contentDescription="@null "
                     android:src="@drawable/ic_camera_account_white_48dp" />
 
                 <android.support.design.widget.TextInputLayout
