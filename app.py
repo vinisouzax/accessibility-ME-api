@@ -70,7 +70,7 @@ def criterio111(child):
             
     #Inputs de texto em formulários possuem texto descritivo
     #Inputs de texto em formulários possuem texto descritivo não nulo
-    if child.tag == 'EditText':
+    elif child.tag == 'EditText':
         if '{http://schemas.android.com/apk/res/android}hint' in child.attrib:
             value = child.attrib['{http://schemas.android.com/apk/res/android}hint']
             if(value == ''):
@@ -100,7 +100,7 @@ def criterio111(child):
             
     #Botões em formulários possuem texto descritivo
     #Botões em formulários possuem texto descritivo não nulo
-    if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton':
+    elif child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton':
         if '{http://schemas.android.com/apk/res/android}text' in child.attrib:
             value = child.attrib['{http://schemas.android.com/apk/res/android}text']
             if(value == ''):
@@ -120,6 +120,61 @@ def criterio111(child):
                 "criterio": '1.1.1 - Conteúdo não textual', 
                 "description": "Não há texto descritivo (text) em botão", 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+    elif '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
+        verifyItemClicable(child)
+
+    elif '{http://schemas.android.com/apk/res/android}clicable' in child.attrib:
+        value = child.attrib['{http://schemas.android.com/apk/res/android}clicable']
+        if(value == 'true'):
+            verifyItemClicable(child)
+
+def verifyItemClicable(child):
+    childs = findChildsFirstLevel(child)
+    if '{http://schemas.android.com/apk/res/android}contentDescription' in child.attrib:
+        value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription']
+        if(value == '@null'):
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.1.1 - Conteúdo não textual', 
+                "description": "Valor nulo na descrição do conteúdo (contentDescription) do componente", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+    elif '{http://schemas.android.com/apk/res/android}text' in child.attrib:
+        value = child.attrib['{http://schemas.android.com/apk/res/android}text']
+        if(value == ''):
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.1.1 - Conteúdo não textual', 
+                "description": "Texto descritivo (text) está com valor vazio", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+    else:
+        existChild = False
+        childs = findChildsFirstLevel(child)
+        for c in childs:
+            if '{http://schemas.android.com/apk/res/android}contentDescription' in c.attrib:
+                value = c.attrib['{http://schemas.android.com/apk/res/android}contentDescription']
+                if(value != '@null'):
+                    existChild = True
+                    break
+
+            elif '{http://schemas.android.com/apk/res/android}text' in c.attrib:
+                value = child.attrib['{http://schemas.android.com/apk/res/android}text']
+                if(value != ''):
+                    existChild = True
+                    break
+
+        if existChild == False:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.1.1 - Conteúdo não textual', 
+                "description": "Item clicável sem alternativa de texto", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 ##########################
 
@@ -191,6 +246,16 @@ def criterio143(child, parent):
 #Level AAA
 #O tamanho do destino para entradas de ponteiro é de pelo menos 44 por 44 pixels em CSS
 
+def erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei):
+    idComponent = ""
+    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+    errosGeral.append({"idComponent": idComponent, 
+        "criterio": '2.5.5 - Tamanho do Alvo', 
+        "description": alt_or_lar+" do alvo não é explicitada em dp nem no componente filho "+child.tag+" e nem no(s) componente(s) pai "+parent.tag+
+        ". Colocar "+min_wid_or_hei+" com valores de 48dp", 
+        "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+
 def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei):
     if '{http://schemas.android.com/apk/res/android}'+width_or_height in parent.attrib:
         value = parent.attrib['{http://schemas.android.com/apk/res/android}'+width_or_height]
@@ -204,15 +269,25 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
                     "criterio": '2.5.5 - Tamanho do Alvo', 
                     "description": alt_or_lar+" do alvo menor que 48dp", 
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
+
+        elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in parent.attrib:
+            value = parent.attrib['{http://schemas.android.com/apk/res/android}'+min_wid_or_hei]
+            if 'dp' in value:
+                value = value.strip('dp').strip(" ")
+                if int(value) < 48:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": '2.5.5 - Tamanho do Alvo', 
+                        "description": min_wid_or_hei+" do alvo menor que 48dp", 
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
+
+            else:
+                erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
+                
         else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": '2.5.5 - Tamanho do Alvo', 
-                "description": alt_or_lar+" do alvo não é explicitada em dp nem no componente filho "+child.tag+" e nem no(s) componente(s) pai "+parent.tag+
-                ". Colocar "+min_wid_or_hei+" com valores de 48dp", 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+            erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
     elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in parent.attrib:
         value = parent.attrib['{http://schemas.android.com/apk/res/android}'+min_wid_or_hei]
@@ -228,24 +303,10 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
         else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": '2.5.5 - Tamanho do Alvo', 
-                "description": alt_or_lar+" do alvo não é explicitada em dp nem no componente filho "+child.tag+" e nem no(s) componente(s) pai "+parent.tag+
-                ". Colocar "+min_wid_or_hei+" com valores de 48dp", 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})
-                
+            erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
+
     else:
-        idComponent = ""
-        if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-            idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-        errosGeral.append({"idComponent": idComponent, 
-            "criterio": '2.5.5 - Tamanho do Alvo', 
-            "description": alt_or_lar+" do alvo não é explicitada em dp nem no componente filho "+child.tag+" e nem no(s) componente(s) pai "+parent.tag+
-            ". Colocar "+min_wid_or_hei+" com valores de 48dp", 
-            "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+        erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
 def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
 
@@ -264,6 +325,20 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                     "description": alt_or_lar+" do alvo menor que 48dp", 
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
+        elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in child.attrib:
+            value = child.attrib['{http://schemas.android.com/apk/res/android}'+min_wid_or_hei]
+            if 'dp' in value:
+                value = value.strip('dp').strip(" ")
+                if int(value) < 48:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": '2.5.5 - Tamanho do Alvo', 
+                        "description": min_wid_or_hei+" do alvo menor que 48dp", 
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
+            else:
+                analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
         else:
             analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
@@ -279,7 +354,6 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                     "criterio": '2.5.5 - Tamanho do Alvo', 
                     "description": min_wid_or_hei+" do alvo menor que 48dp", 
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
-
         else:
             analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
@@ -290,7 +364,7 @@ def criterio255(child, parent):
     if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton' or child.tag == 'EditText' or child.tag == 'ImageButton':   
         analyzeTamanhoAlvo(child, parent, "layout_width", "Largura")
         analyzeTamanhoAlvo(child, parent, "layout_height", "Altura")
-    if '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
+    elif '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
         analyzeTamanhoAlvo(child, parent, "layout_width", "Largura")
         analyzeTamanhoAlvo(child, parent, "layout_height", "Altura")
 
@@ -406,6 +480,13 @@ def findChilds(parent):
             parent = childs[j]
             j+=1
     
+    return childs
+
+def findChildsFirstLevel(parent):
+    childs = []
+    for c, p in parent_map.items():
+        if parent == p:
+            childs.append(c)
     return childs
 
 ##########################
