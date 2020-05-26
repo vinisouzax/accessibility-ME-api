@@ -121,14 +121,30 @@ def criterio111(child):
                 "description": "Não há texto descritivo (text) em botão", 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
+    #Itens com onClick e onTouch
     elif '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
         verifyItemClicable(child)
 
+    #Itens com clicable=true
     elif '{http://schemas.android.com/apk/res/android}clicable' in child.attrib:
         value = child.attrib['{http://schemas.android.com/apk/res/android}clicable'].strip(" ")
         if(value == 'true'):
             verifyItemClicable(child)
 
+    #Conteúdo decorativo
+    elif '{http://schemas.android.com/apk/res/android}focusable' in child.attrib:
+        value = child.attrib['{http://schemas.android.com/apk/res/android}focusable'].strip(" ")
+        childs = findChildsFirstLevel(child)
+        if(value == 'true' and len(childs) == 0):
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.1.1 - Conteúdo não textual', 
+                "description": "Possível elemento decorativo que pode receber foco do leitor de tela. Recomenda-se tirar android:focusable='true'", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+
+#Função para verificar se item clicável possui alternativa de texto
 def verifyItemClicable(child):
     if '{http://schemas.android.com/apk/res/android}contentDescription' in child.attrib:
         value = child.attrib['{http://schemas.android.com/apk/res/android}contentDescription'].strip(" ")
@@ -206,7 +222,10 @@ def getArrayRGB(hexColor):
     array = [x for xs in array for x in xs]
     return array
 
+#Verifica contraste de texto e fundo
 def criterio143(child, parent):
+
+    #Entre fundo e texto do mesmo componente
     if '{http://schemas.android.com/apk/res/android}background' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
@@ -222,6 +241,7 @@ def criterio143(child, parent):
                 "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+ratio+":1", 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
+    #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
