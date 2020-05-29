@@ -24,6 +24,7 @@ def analyze():
             criterio111(c)
             criterio135(p)
             criterio143(c, p)
+            criterio146(c, p)
             criterio251(c)
             criterio255(c, p)
 
@@ -33,6 +34,7 @@ def analyze():
         parent_map = {}
         parent_map = {c:p for p in tree.iter() for c in p}
         for c, p in parent_map.items():
+            criterio134(c)
             criterio242(c)
 
     return jsonify({'erros': errosGeral}), 200
@@ -197,30 +199,6 @@ def verifyItemClicable(child):
 #1.4.3 Contraste Mínimo
 #Level AA
 #A apresentação visual do texto e as imagens do texto têm uma taxa de contraste de pelo menos 4,5: 1
-
-def calc_luminanace(v):
-    v /= 255
-    return  (v / 12.92) if (v <= 0.03928) else (pow( (v + 0.055) / 1.055, 2.4 ))
-                
-def luminanace(r, g, b):
-    r = calc_luminanace(r)
-    g = calc_luminanace(g)
-    b = calc_luminanace(b)
-    return r * 0.2126 + g * 0.7152 + b * 0.0722
-
-def contrast(rgb1, rgb2):
-    lum1 = luminanace(rgb1[0], rgb1[1], rgb1[2])
-    lum2 = luminanace(rgb2[0], rgb2[1], rgb2[2])
-    brightest = max(lum1, lum2)
-    darkest = min(lum1, lum2)
-    return (brightest + 0.05) / (darkest + 0.05)
-
-def getArrayRGB(hexColor):
-    rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2, 4))
-    array = []
-    array.append(rgb)
-    array = [x for xs in array for x in xs]
-    return array
 
 #Verifica contraste de texto e fundo
 def criterio143(child, parent):
@@ -465,9 +443,96 @@ def criterio135(child):
                     "Recomenda-se colocar android:inputType a fim de identificar a finalidade desse componente de texto", 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
+
+##########################
+
+#Guideline 1.3 Adaptável
+#1.3.4 Orientação
+#Level AA
+#O conteúdo não restringe sua exibição e operação a uma única orientação da tela
+
+def criterio134(child):
+    if child.tag == 'activity':   
+        if '{http://schemas.android.com/apk/res/android}screenOrientation' in child.attrib:
+            value = child.attrib['{http://schemas.android.com/apk/res/android}screenOrientation']
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}name' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}name']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.3.4 - Orientação', 
+                "description": "O conteúdo desta página está restrito a apenas um tipo de orientação de tela ("+value+")", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
+
+
+##########################
+
+#Guideline 1.4 Distinguível
+#1.4.6 Contraste Aprimorado
+#Level AAA
+#A apresentação visual do texto e as imagens do texto têm uma taxa de contraste de pelo menos 7: 1
+
+#Verifica contraste de texto e fundo
+def criterio146(child, parent):
+
+    #Entre fundo e texto do mesmo componente
+    if '{http://schemas.android.com/apk/res/android}background' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+        arrayB = getArrayRGB(background)
+        arrayT = getArrayRGB(textColor)
+        ratio = contrast(arrayB, arrayT)
+        if ratio < 7:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.4.6 - Contraste Máximo', 
+                "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+ratio+":1", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+    #Fundo do elemento pai e texto do elemento filho
+    elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+        arrayB = getArrayRGB(background)
+        arrayT = getArrayRGB(textColor)
+        ratio = contrast(arrayB, arrayT)
+        if ratio < 7:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": '1.4.6 - Contraste Máximo', 
+                "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+ratio+":1", 
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
 ##########################
 
 #Funções Genéricas
+
+def calc_luminanace(v):
+    v /= 255
+    return  (v / 12.92) if (v <= 0.03928) else (pow( (v + 0.055) / 1.055, 2.4 ))
+                
+def luminanace(r, g, b):
+    r = calc_luminanace(r)
+    g = calc_luminanace(g)
+    b = calc_luminanace(b)
+    return r * 0.2126 + g * 0.7152 + b * 0.0722
+
+def contrast(rgb1, rgb2):
+    lum1 = luminanace(rgb1[0], rgb1[1], rgb1[2])
+    lum2 = luminanace(rgb2[0], rgb2[1], rgb2[2])
+    brightest = max(lum1, lum2)
+    darkest = min(lum1, lum2)
+    return (brightest + 0.05) / (darkest + 0.05)
+
+def getArrayRGB(hexColor):
+    rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2, 4))
+    array = []
+    array.append(rgb)
+    array = [x for xs in array for x in xs]
+    return array
 
 def findParents(child):
     parents = []
