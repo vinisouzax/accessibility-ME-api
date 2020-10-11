@@ -39,8 +39,12 @@ def analyze():
             criterio134(c)
             criterio242_2410(c)
 
-    return jsonify({'erros': errosGeral}), 200
+    return response_cors(jsonify({'erros': errosGeral}))
 
+#HABILITA CORS PARA RESPOSTA
+def response_cors(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 #Guideline 1.1 Text Alternatives
 #1.1.1 Non-text Content
@@ -602,7 +606,7 @@ def verify_spacing(child):
 def criterio411(child):
     if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
         idChild = child.attrib['{http://schemas.android.com/apk/res/android}id']
-        for c in parent_map.items():
+        for c, p in parent_map.items():
             if '{http://schemas.android.com/apk/res/android}id' in c.attrib:
                 idC = c.attrib['{http://schemas.android.com/apk/res/android}id']
                 if idChild == idC:
