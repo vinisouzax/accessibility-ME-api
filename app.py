@@ -25,8 +25,8 @@ def analyze():
         for c, p in parent_map.items():
             criterio111_131(c)
             criterio135_335(p)
-            criterio143(c, p)
-            criterio146(c, p)
+            #criterio143(c, p)
+            #criterio146(c, p)
             criterio148(c)
             criterio251(c)
             criterio255(c, p)
@@ -641,15 +641,18 @@ def verify_spacing(child):
 def criterio411(child):
     if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
         idChild = child.attrib['{http://schemas.android.com/apk/res/android}id']
+        qtd = 0
         for c, p in parent_map.items():
             if '{http://schemas.android.com/apk/res/android}id' in c.attrib:
                 idC = c.attrib['{http://schemas.android.com/apk/res/android}id']
                 if idChild == idC:
-                    errosGeral.append({"idComponent": idChild, 
-                        "criterio": '4.1.1 - Análise', 
-                        "description": "IDs duplicados", 
-                        "arq": arq, 
-                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+                    if qtd > 0:
+                        errosGeral.append({"idComponent": idChild, 
+                            "criterio": '4.1.1 - Análise', 
+                            "description": "IDs duplicados", 
+                            "arq": arq, 
+                            "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+                    qtd = qtd + 1
 
 ##########################
 

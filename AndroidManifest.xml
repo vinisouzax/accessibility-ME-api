@@ -1,296 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="sigma2.android">
+    package="com.example.androidstarter">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.implementandogcm.permission.C2D_MESSAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".SigmaApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".TempoMaquinaParadaActivity"></activity>
-        <!-- android:theme="@style/Theme.Actionbartema" -->
-        <activity android:name=".activity.NotificationsDetailsActivity" />
-        <activity android:name=".activity.SignatureConfirmationActivity" />
+        android:usesCleartextTraffic="true">
+        <activity android:name=".querys.QueryPreventivaActivity"></activity>
         <activity
-            android:name=".activity.RequestSignatureActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity android:name=".activity.RequestDebugActivity" />
+            android:name=".preventiva.PreventivaActivity"
+            android:label="@string/preventiva"></activity>
         <activity
-            android:name=".activity.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden"
+            android:name=".preventiva.ListaPreventivasActivity"
+            android:label="@string/preventiva" />
+        <activity
+            android:name=".usuario.UsuarioActivity"
+            android:label="@string/usuario" />
+        <activity
+            android:name=".usuario.ListaUsuarioActivity"
+            android:label="@string/usuario" />
+        <activity
+            android:name=".ss.SsDetailsActivity"
+            android:label="@string/sscompleta" />
+        <activity
+            android:name=".ss.SsActivity"
+            android:label="@string/sscompleta" />
+        <activity
+            android:name=".ss.ListaSssActivity"
+            android:label="@string/sscompleta" />
+        <activity
+            android:name=".os.OsDetailsActivity"
+            android:label="@string/oscompleta" />
+        <activity
+            android:name=".querys.QueryTipoOsActivity"
+            android:label="@string/tipoos" />
+        <activity android:name=".querys.QueryFuncionarioActivity" />
+        <activity
+            android:name=".querys.QueryAtivoActivity"
+            android:label="@string/ativos" />
+        <activity
+            android:name=".querys.QuerySolicitanteActivity"
+            android:label="@string/solicitante" />
+        <activity
+            android:name=".os.OsActivity"
+            android:label="@string/oscompleta" />
+        <activity
+            android:name=".os.ListaOssActivity"
+            android:label="@string/oscompleta" />
+        <activity
+            android:name=".maodeobra.MaodeobraActivity"
+            android:label="@string/maodeobra" />
+        <activity
+            android:name=".ativo.AtivoActivity"
+            android:label="@string/ativos" />
+        <activity
+            android:name=".maodeobra.ListaMaodeobraActivity"
+            android:label="@string/maodeobra" />
+        <activity
+            android:name=".ativo.ListaAtivosActivity"
+            android:label="@string/ativos" />
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".activity.ConsultaOSActivity" />
-        <activity
-            android:name=".activity.ChooseDatabaseActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".notificacoes.SigmaFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <activity
-            android:name=".activity.MainActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.AberturaDeSSActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.ConsultaSSActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.SSDetailsActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".activity.DepartamentosActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.SetorActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.CentroDeCustoActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.ProcessoActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.CelulaActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.MaquinaActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.TagActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.EquipamentoActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.SintomaActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.FuncionarioActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.TipoOSActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.AreaExecucaoActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.PrioridadeActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".sobre.CarregarLogotipo"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".abas.ControleAbasSS"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.OsDetailsActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".activity.OSIniciadaActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".qrcode.QrCodeReaderActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".qrcode.MenuQRCodeActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".qrcode.FichaTecnicaActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".qrcode.ProgramacoesActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".qrcode.ResumoProgramacao"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".check_list.DetalhesCheckListActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".check_list.ItensCLActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".check_list.ListaCheckListActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastrosBasicosIndex"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroDepartamento"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBDepartamento"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBSetor"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroSetor"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroProcesso"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBProcesso"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroCelula"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBCelula"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroMaquina"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBMaquina"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroTag"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBTag"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroEquipamento"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ControleAbasCBEquipamento"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".customizacao_pessoal.CarregarImagenPessoal"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".customizacao_pessoal.TiraFotoImagenPessoal"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".galeria_ss.GaleriaFotoSS"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".galeria_ss.TiraFotoGaleriaSS"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".carrega_imagem.CarregarImagemActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".carrega_imagem.ConsultaImagem"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".painelweb.PainelWebActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".activity.AberturaHorasTrabalhadasActivity"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".activity.ControleAbasCBPecas"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".cadastros_basicos.ActivityCadastroPeca"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".activity.PecaActivity"
-            android:theme="@style/NoActionBar" />
-        <!--
-             ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".activity.ZoomImageActivity"
-            android:label="@string/title_activity_detalhes" />
-        <activity android:name=".activity.ServicoPadraoActivity" />
-        <activity
-            android:name=".activity.AssinaturaActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.AberturaDeOSActivity" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="sigma2.android.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
     </application>
 
 </manifest>
