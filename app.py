@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import xml.etree.ElementTree as ET
 import math
+import string
 ET.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 
 errosGeral = []
@@ -8,13 +9,14 @@ parent_map = {}
 arq = ""
 criterio = ""
 nivel = ""
+link = ""
 
 app = Flask(__name__)
 
 
 @app.route('/accessibility', methods=['POST'])
 def analyze():
-    global errosGeral, parent_map, arq, criterio, nivel
+    global errosGeral, parent_map, arq, criterio, nivel, link
     errosGeral = []
     files = request.files.getlist("files")
     manifest = request.files.getlist("manifest")
@@ -27,37 +29,52 @@ def analyze():
         for c, p in parent_map.items():
             criterio = "1.1.1 - Conteúdo não textual"
             nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html"
             criterio111(c)
 
             criterio = "1.3.1 - Informações e Relações"
             nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html"
             criterio111(c)
 
             criterio = "1.3.5 - Identifique o propósito da entrada"
             nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html"
             criterio135(p)
 
             criterio = "3.3.5 - Ajuda"
             nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/help.html"
             criterio135(p)
 
-            #criterio143(c, p)
-            #criterio146(c, p)
+            criterio = "1.4.3 - Contraste Mínimo"
+            nivel = "AA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html"
+            criterio143(c, p)
+
+            criterio = "1.4.6 - Contraste Aprimorado"
+            nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/contrast-enhanced.html"
+            criterio146(c, p)
 
             criterio = "1.4.8 - Apresentação Visual"
             nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/visual-presentation.html"
             criterio148(c)
 
             criterio = "2.5.1 - Gestos de ponteiros"
             nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/pointer-gestures.html"
             criterio251(c)
 
             criterio = "2.5.5 - Tamanho do Alvo"
             nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/target-size.html"
             criterio255(c, p)
 
             criterio = "4.1.1 - Análise"
             nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/parsing.html"
             criterio411(c)
 
     for m in manifest:
@@ -69,14 +86,17 @@ def analyze():
         for c, p in parent_map.items():
             criterio = "1.3.4 - Orientação"
             nivel = "AA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/orientation.html"
             criterio134(c)
 
             criterio = "2.4.2 - Título de página"
             nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/page-titled.html"
             criterio242(c)
 
             criterio = "2.4.10 - Títulos de seção"
             nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/section-headings.html"
             criterio242(c)
 
     return response_cors(jsonify({'erros': errosGeral}))
@@ -114,6 +134,7 @@ def criterio111(child):
                     "nivel": nivel,
                     "description": "Valor nulo na descrição do conteúdo (contentDescription) do componente visual", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})
         else:
             idComponent = ""
@@ -123,7 +144,8 @@ def criterio111(child):
                 "criterio": criterio, 
                 "nivel": nivel,
                 "description": "Não há descrição do conteúdo (contentDescription) do componente visual",
-                "arq": arq,  
+                "arq": arq, 
+                "link": link, 
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})    
             
     #Inputs de texto em formulários possuem texto descritivo
@@ -140,6 +162,7 @@ def criterio111(child):
                     "nivel": nivel,
                     "description": "Texto descritivo (hint) em campo de entrada de texto está com valor vazio", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
 
         else:
@@ -158,6 +181,7 @@ def criterio111(child):
                 "nivel": nivel,
                 "description": "Não há texto descritivo (hint) em campo de entrada de texto", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
             
     #Botões em formulários possuem texto descritivo
@@ -174,6 +198,7 @@ def criterio111(child):
                     "nivel": nivel,
                     "description": "Texto descritivo (text) em botão está com valor vazio", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
         else:
@@ -185,6 +210,7 @@ def criterio111(child):
                 "nivel": nivel,
                 "description": "Não há texto descritivo (text) em botão", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Itens com onClick e onTouch
@@ -210,6 +236,7 @@ def criterio111(child):
                 "nivel": nivel,
                 "description": "Possível elemento decorativo que pode receber foco do leitor de tela. Recomenda-se tirar android:focusable='true'", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})
 
 #Função para verificar se item clicável possui alternativa de texto
@@ -225,6 +252,7 @@ def verifyItemClicable(child):
                 "nivel": nivel,
                 "description": "Valor nulo na descrição do conteúdo (contentDescription) do componente", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})
     elif '{http://schemas.android.com/apk/res/android}text' in child.attrib:
         value = child.attrib['{http://schemas.android.com/apk/res/android}text'].strip(" ")
@@ -237,6 +265,7 @@ def verifyItemClicable(child):
                 "nivel": nivel,
                 "description": "Texto descritivo (text) está com valor vazio", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
     else:
         existChild = False
@@ -263,6 +292,7 @@ def verifyItemClicable(child):
                 "nivel": nivel,
                 "description": "Item clicável sem alternativa de texto", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 ##########################
@@ -279,37 +309,43 @@ def criterio143(child, parent):
     if '{http://schemas.android.com/apk/res/android}background' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
-        arrayB = getArrayRGB(background)
-        arrayT = getArrayRGB(textColor)
-        ratio = contrast(arrayB, arrayT)
-        if ratio < 4.5:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio, 
-                "nivel": nivel,
-                "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                "arq": arq, 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 4.5:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
-        arrayB = getArrayRGB(background)
-        arrayT = getArrayRGB(textColor)
-        ratio = contrast(arrayB, arrayT)
-        if ratio < 4.5:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio, 
-                "nivel": nivel,
-                "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                "arq": arq, 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 4.5:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
                 
 
 ##########################
@@ -329,6 +365,7 @@ def erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
         "description": alt_or_lar+" do alvo não é explicitada em dp nem no componente filho "+child.tag+" e nem no(s) componente(s) pai "+parent.tag+
         ". Colocar "+min_wid_or_hei+" com valores de 48dp", 
         "arq": arq, 
+        "link": link,
         "component": ET.tostring(child, encoding='utf8').decode('utf8')})
 
 def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei):
@@ -345,6 +382,7 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
                     "nivel": nivel,
                     "description": alt_or_lar+" do alvo menor que 48dp", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
         elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in parent.attrib:
@@ -360,6 +398,7 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
                         "nivel": nivel,
                         "description": min_wid_or_hei+" do alvo menor que 48dp", 
                         "arq": arq, 
+                        "link": link,
                         "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
             else:
@@ -381,6 +420,7 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
                     "nivel": nivel,
                     "description": min_wid_or_hei+" do alvo menor que 48dp", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
         else:
@@ -405,7 +445,8 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                     "criterio": criterio, 
                     "nivel": nivel,
                     "description": alt_or_lar+" do alvo menor que 48dp", 
-                    "arq": arq, 
+                    "arq": arq,
+                    "link": link, 
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
         elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in child.attrib:
@@ -420,7 +461,8 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                         "criterio": criterio, 
                         "nivel": nivel,
                         "description": min_wid_or_hei+" do alvo menor que 48dp", 
-                        "arq": arq, 
+                        "arq": arq,
+                        "link": link, 
                         "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
             else:
                 analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
@@ -440,6 +482,7 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                     "nivel": nivel,
                     "description": min_wid_or_hei+" do alvo menor que 48dp", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
         else:
             analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
@@ -474,6 +517,7 @@ def criterio251(child):
             "description": "Está sendo utilizado o componente "+child.tag+". Esse componente exige mais de um gesto, o que pode ocasionar em dificuldades de"+
             " operação para o usuário. Recomenda-se não utilizar esse componente", 
             "arq": arq, 
+            "link": link,
             "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 
@@ -498,6 +542,7 @@ def criterio242(child):
                     "nivel": nivel,
                     "description": "Essa página possui título descrevendo tópico ou finalidade vazio (android:label)", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
         else:
             idComponent = ""
@@ -508,6 +553,7 @@ def criterio242(child):
                 "nivel": nivel,
                 "description": "Essa página não possui título descrevendo tópico ou finalidade (android:label)", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 
@@ -536,6 +582,7 @@ def criterio135(child):
                     "nivel": nivel,
                     "description": "Campo de entrada de texto (EditText) está android:inputType com valor vazio", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
         else:
             idComponent = ""
@@ -547,6 +594,7 @@ def criterio135(child):
                 "description": "Campo de entrada de texto (EditText) sem android:inputType. "+
                     "Recomenda-se colocar android:inputType a fim de identificar a finalidade desse componente de texto", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 
@@ -569,6 +617,7 @@ def criterio134(child):
                 "nivel": nivel,
                 "description": "O conteúdo desta página está restrito a apenas um tipo de orientação de tela ("+value+")", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 
@@ -586,37 +635,43 @@ def criterio146(child, parent):
     if '{http://schemas.android.com/apk/res/android}background' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
-        arrayB = getArrayRGB(background)
-        arrayT = getArrayRGB(textColor)
-        ratio = contrast(arrayB, arrayT)
-        if ratio < 7:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio, 
-                "nivel": nivel,
-                "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                "arq": arq, 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 7:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
-        arrayB = getArrayRGB(background)
-        arrayT = getArrayRGB(textColor)
-        ratio = contrast(arrayB, arrayT)
-        if ratio < 7:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                "arq": arq, 
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 7:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio,
+                    "nivel": nivel, 
+                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
@@ -645,6 +700,7 @@ def verify_justification(child):
                     "nivel": nivel,
                     "description": "Componente com alinhamento justificado", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
         elif '{http://schemas.android.com/apk/res/android}layout_gravity' in child.attrib:
             gravity = child.attrib['{http://schemas.android.com/apk/res/android}layout_gravity']
@@ -657,6 +713,7 @@ def verify_justification(child):
                     "nivel": nivel,
                     "description": "Componente com alinhamento justificado", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
         elif '{http://schemas.android.com/apk/res/android}textAlignment' in child.attrib:
             gravity = child.attrib['{http://schemas.android.com/apk/res/android}textAlignment']
@@ -669,6 +726,7 @@ def verify_justification(child):
                     "nivel": nivel,
                     "description": "Componente com alinhamento justificado", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
 #Verifica se espaçamento entre linhas dentro do paragráfo é de 1.5
@@ -685,6 +743,7 @@ def verify_spacing(child):
                     "nivel": nivel,
                     "description": "Espaçamento entre linhas dentro do paragráfo não é de 1,5", 
                     "arq": arq, 
+                    "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
 
         elif '{http://schemas.android.com/apk/res/android}layout_gravity' in child.attrib:
@@ -696,6 +755,7 @@ def verify_spacing(child):
                 "nivel": nivel,
                 "description": "Não tem espaçamento entre linhas dentro do paragráfo", 
                 "arq": arq, 
+                "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
@@ -721,6 +781,7 @@ def criterio411(child):
                             "nivel": nivel,
                             "description": "IDs duplicados", 
                             "arq": arq, 
+                            "link": link,
                             "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
                     qtd = qtd + 1
 
