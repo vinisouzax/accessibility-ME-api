@@ -169,7 +169,7 @@ def criterio111(child):
             idComponent = ""
             if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
                 idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                for c in parent_map.items():
+                for c, p in parent_map.items():
                     if(c.tag == 'TextView'):
                         if '{http://schemas.android.com/apk/res/android}labelFor' in c.attrib:
                             value = c.attrib['{http://schemas.android.com/apk/res/android}labelFor'].strip(" ")
@@ -807,7 +807,14 @@ def contrast(rgb1, rgb2):
     return (brightest + 0.05) / (darkest + 0.05)
 
 def getArrayRGB(hexColor):
-    rgb = tuple(int(hexColor[i:i+2], 16) for i in (0, 2, 4))
+    lv = len(hexColor)
+    if lv == 1:
+        v = int(hexColor, 16)*17
+        rgb = v, v, v
+    elif lv == 3:
+        rgb = tuple(int(hexColor[i:i+1], 16)*17 for i in range(0, 3))
+    else:
+        rgb = tuple(int(hexColor[i:i+lv//3], 16) for i in range(0, lv, lv//3))
     array = []
     array.append(rgb)
     array = [x for xs in array for x in xs]
