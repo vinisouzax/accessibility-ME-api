@@ -94,6 +94,16 @@ def analyze():
             link = "https://www.w3.org/WAI/WCAG21/Understanding/page-titled.html"
             criterio242(c)
 
+            criterio = "2.4.4 - Objetivo do Link (no Contexto)"
+            nivel = "A"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-in-context.html"
+            criterio242(c)
+
+            criterio = "2.4.9 - Objetivo do Link (apenas Link)"
+            nivel = "AAA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-link-only.html"
+            criterio242(c)
+
             criterio = "2.4.10 - Títulos de seção"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/section-headings.html"
@@ -325,6 +335,17 @@ def criterio143(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        else:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio,
+                "nivel": nivel, 
+                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -346,6 +367,17 @@ def criterio143(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        else:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio,
+                "nivel": nivel, 
+                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
                 
 
 ##########################
@@ -651,6 +683,17 @@ def criterio146(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        else:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio,
+                "nivel": nivel, 
+                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -672,6 +715,17 @@ def criterio146(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        else:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio,
+                "nivel": nivel, 
+                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
