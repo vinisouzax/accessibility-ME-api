@@ -10,16 +10,26 @@ arq = ""
 criterio = ""
 nivel = ""
 link = ""
+colors_map = {}
 
 app = Flask(__name__)
 
 
 @app.route('/accessibility', methods=['POST'])
 def analyze():
-    global errosGeral, parent_map, arq, criterio, nivel, link
+    global errosGeral, parent_map, arq, criterio, nivel, link, colors_map
     errosGeral = []
     files = request.files.getlist("files")
     manifest = request.files.getlist("manifest")
+    color = request.files.getlist("color")
+
+    for c in color:
+        c.save(c.filename)
+        tree = ET.parse(c.filename)
+        arq = c.filename
+        colors_map = {}
+        colors_map = {c:p for p in tree.iter() for c in p}
+
     for file in files:
         file.save(file.filename)
         tree = ET.parse(file.filename)
@@ -325,6 +335,9 @@ def criterio143(child, parent):
         background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
 
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
         if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
             arrayB = getArrayRGB(background)
             arrayT = getArrayRGB(textColor)
@@ -340,23 +353,15 @@ def criterio143(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-        else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
 
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
         if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
             arrayB = getArrayRGB(background)
             arrayT = getArrayRGB(textColor)
@@ -372,17 +377,55 @@ def criterio143(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-        else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+
+    #Entre fundo com background tint e texto do mesmo componente
+    if '{http://schemas.android.com/apk/res/android}backgroundTint' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = child.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 4.5:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+    #Fundo do elemento pai com backgroundTint e texto do elemento filho
+    elif '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = parent.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 4.5:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
@@ -672,6 +715,9 @@ def criterio146(child, parent):
         background = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
 
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
         if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
             arrayB = getArrayRGB(background)
             arrayT = getArrayRGB(textColor)
@@ -687,22 +733,14 @@ def criterio146(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-        else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
         background = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
 
         if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
             arrayB = getArrayRGB(background)
@@ -719,17 +757,55 @@ def criterio146(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-        else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
+
+
+    #Entre fundo com backgroundTint e texto do mesmo componente
+    if '{http://schemas.android.com/apk/res/android}backgroundTint' in child.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = child.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 7:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})    
+
+    #Fundo do elemento pai com backgroundTint e texto do elemento filho
+    elif '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
+        background = parent.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        textColor = child.attrib['{http://schemas.android.com/apk/res/android}textColor'].lstrip('#')
+
+        background = trata_cores(background)
+        textColor = trata_cores(textColor)
+
+        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+            arrayB = getArrayRGB(background)
+            arrayT = getArrayRGB(textColor)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 7:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio,
+                    "nivel": nivel, 
+                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
 
 ##########################
 
@@ -858,6 +934,9 @@ def criterio1411(child, parent):
         backgroundP = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
         backgroundC = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
 
+        backgroundP = trata_cores(backgroundP)
+        backgroundC = trata_cores(backgroundC)
+
         if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
             arrayB = getArrayRGB(backgroundP)
             arrayT = getArrayRGB(backgroundC)
@@ -873,21 +952,47 @@ def criterio1411(child, parent):
                     "arq": arq, 
                     "link": link,
                     "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-        else:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio,
-                "nivel": nivel, 
-                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
+    #Fundo do elemento pai com backgroundTint e fundo do elemento filho com backgroundTint
+    if '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}backgroundTint' in child.attrib:
+        backgroundP = parent.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        backgroundC = child.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+
+        backgroundP = trata_cores(backgroundP)
+        backgroundC = trata_cores(backgroundC)
+
+        if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
+            arrayB = getArrayRGB(backgroundP)
+            arrayT = getArrayRGB(backgroundC)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 3:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
 #Funções Genéricas
+
+def trata_cores(cor):
+    if "color/" in cor:
+        cor_aux = cor.split("color/")
+        for c, p in colors_map.items():
+            if c.tag == 'color':   
+                if 'name' in c.attrib:
+                    value = c.attrib['name'].strip(" ")
+                    if(value == cor_aux[1]):
+                        return c.text.lstrip('#')
+    else:
+        return cor
+
 
 def calc_luminanace(v):
     v /= 255
