@@ -62,6 +62,11 @@ def analyze():
             link = "https://www.w3.org/WAI/WCAG21/Understanding/visual-presentation.html"
             criterio148(c)
 
+            criterio = "1.4.11 Contraste sem texto"
+            nivel = "AA"
+            link = "https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html"
+            criterio1411(c, p)
+
             criterio = "2.5.1 - Gestos de ponteiros"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/pointer-gestures.html"
@@ -378,7 +383,6 @@ def criterio143(child, parent):
                 "arq": arq, 
                 "link": link,
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
-                
 
 ##########################
 
@@ -725,7 +729,7 @@ def criterio146(child, parent):
                 "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
                 "arq": arq, 
                 "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
 
 ##########################
 
@@ -838,6 +842,48 @@ def criterio411(child):
                             "link": link,
                             "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
                     qtd = qtd + 1
+
+##########################
+
+#Guideline 1.4 Distinguível
+#1.4.11 Contraste sem texto
+#Level AA
+#A apresentação visual do seguinte tem uma relação de contraste de pelo menos 3: 1 contra as cores adjacentes
+
+#Verifica contraste de fundos entre elemento pai e filho
+def criterio1411(child, parent):
+
+    #Fundo do elemento pai e fundo do elemento filho
+    if '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}background' in child.attrib:
+        backgroundP = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
+        backgroundC = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
+
+        if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
+            arrayB = getArrayRGB(backgroundP)
+            arrayT = getArrayRGB(backgroundC)
+            ratio = contrast(arrayB, arrayT)
+            if ratio < 3:
+                idComponent = ""
+                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                errosGeral.append({"idComponent": idComponent, 
+                    "criterio": criterio, 
+                    "nivel": nivel,
+                    "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
+                    "arq": arq, 
+                    "link": link,
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        else:
+            idComponent = ""
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio,
+                "nivel": nivel, 
+                "description": "Não foi possível calcular o contraste, pois a cor não está em formato hexadecimal. Verificar manualmente.", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
