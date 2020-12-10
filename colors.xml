@@ -1,10 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+https://material.io/guidelines/style/color.html#color-color-palette
+Color Tool: https://material.io/color/#!/?view.left=0&view.right=0&primary.color=3F51B5&primary.text.color=3F51B5&secondary.color=1A237E
+-->
 <resources>
-    <color name="colorPrimary">#4285f4</color>
-    <color name="colorPrimaryDark">#4285f4</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="colorVerde">#34a853</color>
-    <color name="colorAmerelo">#fbbf00</color>
-    <color name="colorVermelho">#ea4335</color>
-    <color name="colorAmerelo2">#ca9026</color>
+
+    <color name="colorPrimary">#b2dfdb</color>
+    <color name="colorPrimaryDark">#82ada9</color>
+    <!--
+    <color name="colorAccent">#e5ffff</color>
+    <color name="colorAccent_4">#3f51b5</color>
+
+    <color name="colorAccent_3">#FFA000</color>
+    <color name="colorAccent_2">#f2fe71</color>
+-->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#B6B6B6</color>
+<!--
+    <color name="colorPrimary_">#00bcd4</color>
+    <color name="colorPrimaryDark_">#0097a7</color>
+    <color name="colorAccent_">#f2fe71</color>
+
+    <color name="bg_login">#26ae90</color>
+    <color name="bg_register">#030303</color>
+    <color name="bg_main">#0A4D86</color>
+    <color name="white">#ffffff</color>
+
+    <color name="input_hint">#c5c5c5</color>
+    <color name="input_login">#ffffff</color>
+    <color name="input_login_hint">#999999</color>
+
+    <color name="input_register">#888888</color>
+    <color name="input_register_bg">#3b4148</color>
+    <color name="input_register_hint">#5e6266</color>
+    <color name="btn_login">#26ae90</color>
+    <color name="btn_login_bg">#ECEEF1</color>
+    <color name="lbl_name">#333333</color>
+    <color name="btn_logut_bg">#FFFFFF</color>
+
+    <color name="btn_input_not">#CED0D4</color>
+    -->
+<!--
+    # Padrões de cores do SofiaFalaTherapist (com base na logo)
+    E7DA10
+    4F946D
+    DF7824
+    0B50B6
+    4DC91E
+    C8729C
+    0ABDD5
+    B7A51A
+-->
+
+<!--
+    # Padrão 01
+    <color name="colorPrimary">#00bcd4</color>
+    <color name="colorPrimaryDark">#0097a7</color>
+    <color name="colorAccent">#f2fe71</color>
+
+    <color name="bg_login">#26ae90</color>
+    <color name="bg_register">#2e3237</color>
+    <color name="bg_main">#428bca</color>
+    <color name="white">#ffffff</color>
+    <color name="input_login">#222222</color>
+    <color name="input_login_hint">#999999</color>
+    <color name="input_register">#888888</color>
+    <color name="input_register_bg">#3b4148</color>
+    <color name="input_register_hint">#5e6266</color>
+    <color name="btn_login">#26ae90</color>
+    <color name="btn_login_bg">#eceef1</color>
+    <color name="lbl_name">#333333</color>
+    <color name="btn_logut_bg">#ff6861</color>
+-->
+
 </resources>

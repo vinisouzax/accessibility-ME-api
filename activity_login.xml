@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?><!--<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:theme="@style/AppTheme"
+    tools:context="br.sofiafala.children.activities.LoginActivity">
+
+
+    <LinearLayout
+        android:id="@+id/backg"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/background_luxury"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="172dp"
+            android:layout_height="151dp"
+
+            android:layout_gravity="center_horizontal|top"
+            android:src="@drawable/_logo_high" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/input_login"
+            android:text="@string/lbl_name_module"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white"
+            android:textSize="32dp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            app:counterOverflowTextAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:errorTextAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1">
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:shadowColor="@color/white"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/white"
+                android:textColorHint="@color/white"
+                android:textColorLink="@color/white"
+                android:textCursorDrawable="@color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            app:counterOverflowTextAppearance="@style/AppTheme2"
+            app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="Senha"
+                android:inputType="textPassword"
+                android:shadowColor="@color/white"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/white"
+                android:textColorHint="@color/white"
+                android:textColorLink="@color/white"
+                android:textCursorDrawable="@color/white" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="SENHA"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+        -->
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/cardview_shadow_end_color"
+            android:text="Login"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/txt_permissao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/btn_login"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="50dp"
+            android:text="Você precisa aceitar as permissões primeiro"
+            android:textColor="@android:color/holo_red_dark"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="100dp"
+            android:text="@string/lbl_privacy_policy"
+            android:textColor="@android:color/white"
+            android:textSize="10dp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="88dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
