@@ -338,21 +338,22 @@ def criterio143(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 4.5:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 4.5:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -362,21 +363,22 @@ def criterio143(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 4.5:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 4.5:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 
     #Entre fundo com background tint e texto do mesmo componente
@@ -387,21 +389,22 @@ def criterio143(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 4.5:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 4.5:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai com backgroundTint e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -411,21 +414,22 @@ def criterio143(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 4.5:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 4.5:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 4,5:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
@@ -718,21 +722,22 @@ def criterio146(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 7:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 7:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -742,21 +747,22 @@ def criterio146(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 7:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio,
-                    "nivel": nivel, 
-                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 7:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio,
+                        "nivel": nivel, 
+                        "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 
     #Entre fundo com backgroundTint e texto do mesmo componente
@@ -767,21 +773,22 @@ def criterio146(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 7:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})    
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 7:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})    
 
     #Fundo do elemento pai com backgroundTint e texto do elemento filho
     elif '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}textColor' in child.attrib:
@@ -791,21 +798,22 @@ def criterio146(child, parent):
         background = trata_cores(background)
         textColor = trata_cores(textColor)
 
-        if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
-            arrayB = getArrayRGB(background)
-            arrayT = getArrayRGB(textColor)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 7:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio,
-                    "nivel": nivel, 
-                    "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
+        if background != None and textColor != None:
+            if all(c in string.hexdigits for c in background) and all(c in string.hexdigits for c in textColor):
+                arrayB = getArrayRGB(background)
+                arrayT = getArrayRGB(textColor)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 7:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio,
+                        "nivel": nivel, 
+                        "description": "Constraste menor que 7:1. Resultado entre cores #"+background+" e #"+textColor+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})   
 
 ##########################
 
@@ -937,21 +945,22 @@ def criterio1411(child, parent):
         backgroundP = trata_cores(backgroundP)
         backgroundC = trata_cores(backgroundC)
 
-        if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
-            arrayB = getArrayRGB(backgroundP)
-            arrayT = getArrayRGB(backgroundC)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 3:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if backgroundP != None and backgroundC != None:
+            if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
+                arrayB = getArrayRGB(backgroundP)
+                arrayT = getArrayRGB(backgroundC)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 3:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Fundo do elemento pai com backgroundTint e fundo do elemento filho com backgroundTint
     if '{http://schemas.android.com/apk/res/android}backgroundTint' in parent.attrib and '{http://schemas.android.com/apk/res/android}backgroundTint' in child.attrib:
@@ -961,21 +970,22 @@ def criterio1411(child, parent):
         backgroundP = trata_cores(backgroundP)
         backgroundC = trata_cores(backgroundC)
 
-        if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
-            arrayB = getArrayRGB(backgroundP)
-            arrayT = getArrayRGB(backgroundC)
-            ratio = contrast(arrayB, arrayT)
-            if ratio < 3:
-                idComponent = ""
-                if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                    idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-                errosGeral.append({"idComponent": idComponent, 
-                    "criterio": criterio, 
-                    "nivel": nivel,
-                    "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
-                    "arq": arq, 
-                    "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+        if backgroundP != None and backgroundC != None:
+            if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
+                arrayB = getArrayRGB(backgroundP)
+                arrayT = getArrayRGB(backgroundC)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 3:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Constraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 

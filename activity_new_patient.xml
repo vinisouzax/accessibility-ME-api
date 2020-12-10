@@ -20,8 +20,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin"
-		android:onClick="">
+                android:padding="@dimen/activity_horizontal_margin">
 
                 <!--
         <TextView
@@ -38,12 +37,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
                     android:layout_marginBottom="-15dp"
-		    android:contentDescription="@null "
                     android:src="@drawable/ic_camera_account_white_48dp" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="48dp"
-                    android:layout_height="48dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/field_name"
@@ -180,11 +178,9 @@
                 <!-- Login Button -->
                 <Button
                     android:id="@+id/fab_submit_patient"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-		    android:background="#03fc4e"
-		    android:textColor="#3503fc"
                     android:text="Cadastrar" />
 
             </LinearLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <include
+            android:id="@+id/training_author_layout"
+            layout="@layout/include_training_main_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true" />
+
+        <LinearLayout
+            android:id="@+id/training_star_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/training_author_layout"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/training_author_layout"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/training_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="3dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_file_pdf_black_48dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/star"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="3dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_toggle_star_outline_24" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/training_num_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="invisible"
+            tools:text="1" />
+
+        <include
+            layout="@layout/include_training_date_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/training_author_layout"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp" />
+
+        <include
+            layout="@layout/include_training_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/training_author_layout"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
