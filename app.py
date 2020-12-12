@@ -129,6 +129,8 @@ def analyze():
 #HABILITA CORS PARA RESPOSTA
 def response_cors(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
     return response
 
 #Guideline 1.1 Text Alternatives
