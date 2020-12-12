@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from os import environ
 import xml.etree.ElementTree as ET
 import math
 import string
@@ -14,6 +15,7 @@ colors_map = {}
 
 app = Flask(__name__)
 
+app.config['APP_URL'] = environ.get('APP_URL')
 
 @app.route('/accessibility', methods=['POST'])
 def analyze():
@@ -128,7 +130,7 @@ def analyze():
 
 #HABILITA CORS PARA RESPOSTA
 def response_cors(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", app.config['APP_URL'])
     return response
 
 #Guideline 1.1 Text Alternatives
