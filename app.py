@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 import xml.etree.ElementTree as ET
 import math
 import string
@@ -14,7 +13,7 @@ link = ""
 colors_map = {}
 
 app = Flask(__name__)
-CORS(app)
+
 
 @app.route('/accessibility', methods=['POST'])
 def analyze():
@@ -125,7 +124,7 @@ def analyze():
             link = "https://www.w3.org/WAI/WCAG21/Understanding/section-headings.html"
             criterio242(c)
 
-    return jsonify({'erros': errosGeral})
+    return response_cors(jsonify({'erros': errosGeral}))
 
 #HABILITA CORS PARA RESPOSTA
 def response_cors(response):
