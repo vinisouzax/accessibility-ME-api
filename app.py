@@ -125,7 +125,7 @@ def analyze():
             link = "https://www.w3.org/WAI/WCAG21/Understanding/section-headings.html"
             criterio242(c)
 
-    return response_cors(jsonify({'erros': errosGeral}))
+    return jsonify({'erros': errosGeral})
 
 #HABILITA CORS PARA RESPOSTA
 def response_cors(response):
