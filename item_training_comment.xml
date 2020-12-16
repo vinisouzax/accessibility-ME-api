@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/training_comment_picture"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/image_plus_picture_off" />
+
+    <ImageView
+        android:id="@+id/training_comment_sound"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/training_comment_picture"
+        android:layout_toRightOf="@+id/training_comment_picture"
+        android:src="@drawable/microphone_plus_off" />
+
+    <ImageView
+        android:id="@+id/training_comment_delete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/training_comment_sound"
+        android:layout_toRightOf="@+id/training_comment_sound"
+        android:src="@drawable/delete_forever" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:padding="5dp"
+        android:layout_toRightOf="@+id/training_comment_delete">
+
+        <TextView
+            android:id="@+id/training_word"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Palavra...." />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/training_comment_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        tools:text="Observações sobre a realização da palavra..." />
+
+</RelativeLayout>

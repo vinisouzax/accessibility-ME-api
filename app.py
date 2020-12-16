@@ -574,7 +574,7 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
         analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
 def criterio255(child, parent):
-    if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton' or child.tag == 'EditText' or child.tag == 'ImageButton':   
+    if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or child.tag == 'FloatingActionButton' or child.tag == 'EditText' or child.tag == 'ImageButton' or child.tag == 'Spinner':   
         analyzeTamanhoAlvo(child, parent, "layout_width", "Largura")
         analyzeTamanhoAlvo(child, parent, "layout_height", "Altura")
     elif '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
