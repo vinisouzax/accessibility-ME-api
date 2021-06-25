@@ -55,12 +55,12 @@ def analyze():
             criterio = "1.3.5 - Identifique o propósito da entrada"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html"
-            criterio135(p)
+            criterio135(c)
 
             criterio = "3.3.5 - Ajuda"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/help.html"
-            criterio135(p)
+            criterio135(c)
 
             criterio = "1.4.3 - Contraste Mínimo"
             nivel = "AA"
@@ -914,32 +914,32 @@ def verify_justification(child):
 
 #Verifica se espaçamento entre linhas dentro do paragráfo é de 1.5
 def verify_spacing(child):
-    if '{http://schemas.android.com/apk/res/android}text' in child.attrib:
-        if '{http://schemas.android.com/apk/res/android}lineSpacingMultiplier' in child.attrib:
-            gravity = float(child.attrib['{http://schemas.android.com/apk/res/android}lineSpacingMultiplier'])
-            if gravity != 1.5:
+    if child.tag == 'TextView':  
+        if '{http://schemas.android.com/apk/res/android}text' in child.attrib:
+            if '{http://schemas.android.com/apk/res/android}lineSpacingMultiplier' in child.attrib:
+                gravity = float(child.attrib['{http://schemas.android.com/apk/res/android}lineSpacingMultiplier'])
+                if gravity != 1.5:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Espaçamento entre linhas dentro do paragráfo não é de 1,5", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
+            else:
                 idComponent = ""
                 if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
                     idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
                 errosGeral.append({"idComponent": idComponent, 
                     "criterio": criterio, 
                     "nivel": nivel,
-                    "description": "Espaçamento entre linhas dentro do paragráfo não é de 1,5", 
+                    "description": "Espaçamento entre linhas dentro do paragráfo não é especificado em código-fonte", 
                     "arq": arq, 
                     "link": link,
-                    "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
-
-        elif '{http://schemas.android.com/apk/res/android}layout_gravity' in child.attrib:
-            idComponent = ""
-            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
-                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
-            errosGeral.append({"idComponent": idComponent, 
-                "criterio": criterio, 
-                "nivel": nivel,
-                "description": "Não tem espaçamento entre linhas dentro do paragráfo", 
-                "arq": arq, 
-                "link": link,
-                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+                    "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
 ##########################
 
