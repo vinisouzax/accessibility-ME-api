@@ -42,57 +42,67 @@ def analyze():
         parent_map = {}
         parent_map = {c:p for p in tree.iter() for c in p}
         for c, p in parent_map.items():
-            criterio = "1.1.1 - Conteúdo não textual"
+            criterio = "1_1_1 - Conteúdo não textual"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html"
-            criterio111(c)
+            if verify_visibility(c):
+                criterio111(c)
 
-            criterio = "1.3.1 - Informações e Relações"
+            criterio = "1_3_1 - Informações e Relações"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html"
-            criterio111(c)
+            if verify_visibility(c):
+                criterio111(c)
 
-            criterio = "1.3.5 - Identifique o propósito da entrada"
+            criterio = "1_3_5 - Identifique o propósito da entrada"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html"
-            criterio135(c)
+            if verify_visibility(c):
+                criterio135(c)
 
-            criterio = "3.3.5 - Ajuda"
+            criterio = "3_3_5 - Ajuda"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/help.html"
-            criterio135(c)
+            if verify_visibility(c):
+                criterio135(c)
 
-            criterio = "1.4.3 - Contraste Mínimo"
+            criterio = "1_4_3 - Contraste Mínimo"
             nivel = "AA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html"
-            criterio143(c, p)
+            if verify_visibility(c):
+                criterio143(c, p)
 
-            criterio = "1.4.6 - Contraste Aprimorado"
+            criterio = "1_4_6 - Contraste Aprimorado"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/contrast-enhanced.html"
-            criterio146(c, p)
+            if verify_visibility(c):
+                criterio146(c, p)
 
-            criterio = "1.4.8 - Apresentação Visual"
+            criterio = "1_4_8 - Apresentação Visual"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/visual-presentation.html"
-            criterio148(c)
+            if verify_visibility(c):
+                criterio148(c)
 
-            criterio = "1.4.11 Contraste sem texto"
+            criterio = "1_4_11 Contraste sem texto"
             nivel = "AA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html"
-            criterio1411(c, p)
+            if verify_visibility(c):
+                criterio1411(c, p)
 
-            criterio = "2.5.1 - Gestos de ponteiros"
+            criterio = "2_5_1 - Gestos de ponteiros"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/pointer-gestures.html"
-            criterio251(c)
+            if verify_visibility(c):
+                criterio251(c)
 
-            criterio = "2.5.5 - Tamanho do Alvo"
+            criterio = "2_5_5 - Tamanho do Alvo"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/target-size.html"
-            criterio255(c, p)
+            if verify_visibility(c):
+                criterio255(c, p)
 
-            criterio = "4.1.1 - Análise"
+            criterio = "4_1_1 - Análise"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/parsing.html"
             criterio411(c)
@@ -105,27 +115,27 @@ def analyze():
         parent_map = {}
         parent_map = {c:p for p in tree.iter() for c in p}
         for c, p in parent_map.items():
-            criterio = "1.3.4 - Orientação"
+            criterio = "1_3_4 - Orientação"
             nivel = "AA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/orientation.html"
             criterio134(c)
 
-            criterio = "2.4.2 - Título de página"
+            criterio = "2_4_2 - Título de página"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/page-titled.html"
             criterio242(c)
 
-            criterio = "2.4.4 - Objetivo do Link (no Contexto)"
+            criterio = "2_4_4 - Objetivo do Link (no Contexto)"
             nivel = "A"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-in-context.html"
             criterio242(c)
 
-            criterio = "2.4.9 - Objetivo do Link (apenas Link)"
+            criterio = "2_4_9 - Objetivo do Link (apenas Link)"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-link-only.html"
             criterio242(c)
 
-            criterio = "2.4.10 - Títulos de seção"
+            criterio = "2_4_10 - Títulos de seção"
             nivel = "AAA"
             link = "https://www.w3.org/WAI/WCAG21/Understanding/section-headings.html"
             criterio242(c)
@@ -220,11 +230,11 @@ def criterio111(child):
                 "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
 
     #Considerar essa avaliação apenas caso seja o CS 1.1.1
-    elif criterio == '1.1.1 - Conteúdo não textual':
+    elif criterio == '1_1_1 - Conteúdo não textual':
 
         #Botões em formulários possuem texto descritivo
         #Botões em formulários possuem texto descritivo não nulo
-        if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or ('FloatingActionButton' in child.tag):
+        if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or ('FloatingActionButton' in child.tag) or ('Switch' in child.tag):
             if '{http://schemas.android.com/apk/res/android}text' in child.attrib:
                 value = child.attrib['{http://schemas.android.com/apk/res/android}text'].strip(" ")
                 if(value == ''):
@@ -493,6 +503,7 @@ def erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
         "component": ET.tostring(child, encoding='utf8').decode('utf8')})
 
 def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei):
+    valueC = child.attrib['{http://schemas.android.com/apk/res/android}'+width_or_height]
     if '{http://schemas.android.com/apk/res/android}'+width_or_height in parent.attrib:
         value = parent.attrib['{http://schemas.android.com/apk/res/android}'+width_or_height]
         if 'dp' in value:
@@ -527,9 +538,9 @@ def analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_
 
             else:
                 erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
-                
-        else:
-            erro_else_parent(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
+
+        else: 
+            return
 
     elif '{http://schemas.android.com/apk/res/android}'+min_wid_or_hei in parent.attrib:
         value = parent.attrib['{http://schemas.android.com/apk/res/android}'+min_wid_or_hei]
@@ -588,8 +599,20 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
                         "arq": arq,
                         "link": link, 
                         "component": ET.tostring(child, encoding='utf8').decode('utf8')}) 
-            else:
-                analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
+                else:
+                    analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
+
+        elif value == 'wrap_content' and width_or_height == 'layout_height' and child.tag == 'EditText':
+            if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+            errosGeral.append({"idComponent": idComponent, 
+                "criterio": criterio, 
+                "nivel": nivel,
+                "description": alt_or_lar+" do alvo menor que 48dp", 
+                "arq": arq, 
+                "link": link,
+                "component": ET.tostring(child, encoding='utf8').decode('utf8')})  
+
         else:
             analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
@@ -615,7 +638,7 @@ def analyzeTamanhoAlvo(child, parent, width_or_height, alt_or_lar):
         analyzeParentTamanho(child, parent, width_or_height, alt_or_lar, min_wid_or_hei)
 
 def criterio255(child, parent):
-    if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or ('FloatingActionButton' in child.tag) or child.tag == 'EditText' or child.tag == 'ImageButton' or child.tag == 'Spinner':   
+    if child.tag == 'Button' or child.tag == 'RadioButton' or child.tag == 'ToggleButton' or ('FloatingActionButton' in child.tag) or ('Switch' in child.tag) or child.tag == 'EditText' or child.tag == 'ImageButton' or child.tag == 'Spinner':   
         analyzeTamanhoAlvo(child, parent, "layout_width", "Largura")
         analyzeTamanhoAlvo(child, parent, "layout_height", "Altura")
     elif '{http://schemas.android.com/apk/res/android}onClick' in child.attrib or '{http://schemas.android.com/apk/res/android}onTouch' in child.attrib:
@@ -978,6 +1001,31 @@ def criterio411(child):
 #Verifica contraste de fundos entre elemento pai e filho
 def criterio1411(child, parent):
 
+    #Entre fundo e cor de imagem do mesmo componente
+    if '{http://schemas.android.com/apk/res/android}backgroundTint' in child.attrib and '{http://schemas.android.com/apk/res/android}background' in child.attrib:
+        backgroundP = child.attrib['{http://schemas.android.com/apk/res/android}backgroundTint'].lstrip('#')
+        backgroundC = child.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
+
+        backgroundP = trata_cores(backgroundP)
+        backgroundC = trata_cores(backgroundC)
+
+        if backgroundP != None and backgroundC != None:
+            if all(c in string.hexdigits for c in backgroundP) and all(c in string.hexdigits for c in backgroundC):
+                arrayB = getArrayRGB(backgroundP)
+                arrayT = getArrayRGB(backgroundC)
+                ratio = contrast(arrayB, arrayT)
+                if ratio < 3:
+                    idComponent = ""
+                    if '{http://schemas.android.com/apk/res/android}id' in child.attrib:
+                        idComponent = child.attrib['{http://schemas.android.com/apk/res/android}id']
+                    errosGeral.append({"idComponent": idComponent, 
+                        "criterio": criterio, 
+                        "nivel": nivel,
+                        "description": "Contraste menor que 3:1. Resultado entre cores #"+backgroundP+" e #"+backgroundC+" = "+str(ratio)+":1", 
+                        "arq": arq, 
+                        "link": link,
+                        "component": ET.tostring(child, encoding='utf8').decode('utf8')})
+
     #Fundo do elemento pai e fundo do elemento filho
     if '{http://schemas.android.com/apk/res/android}background' in parent.attrib and '{http://schemas.android.com/apk/res/android}background' in child.attrib:
         backgroundP = parent.attrib['{http://schemas.android.com/apk/res/android}background'].lstrip('#')
@@ -1114,6 +1162,15 @@ def findChildsFirstLevel(parent):
         if parent == p:
             childs.append(c)
     return childs
+
+#Verifica visibilidade
+def verify_visibility(child):
+    if '{http://schemas.android.com/apk/res/android}visibility' in child.attrib:
+        v = child.attrib['{http://schemas.android.com/apk/res/android}visibility'] 
+        if v == 'invisible' or v == 'gone':
+            return False
+    return True    
+
 
 ##########################
 
